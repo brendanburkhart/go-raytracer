@@ -1,0 +1,11 @@
+# VSCode settings folder
+.vscode/*
+
+# Binaries
+*.exe
+
+# Scene data files
+/scenes/*
+
+# Rendered images
+*.png
