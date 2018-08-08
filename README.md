@@ -8,7 +8,7 @@ Renders large/complicated scenes quickly using goroutines. Supports orthographic
 
 I currently only support materials, not rendering textures or UV mapping. Additionally, only planes, spheres and boxes are supported. I may add support for UV mapping and more complex/custom shapes eventually.
 
-Both Lambert and Phong lighting are supported, and both work with reflections and shadows. Refraction is not currently available.
+Both Lambertian and Phong lighting models are supported, and both work with reflections and shadows. Refraction is not currently available.
 
 I added simple configurable anti-aliasing through super sampling.
 
@@ -34,9 +34,11 @@ Scenes are described using JSON files in the following format:
     "target": Vector, specifies where the camera is pointed,
     "roll": Camera roll in degrees, positive is counter-clockwise when facing the same direction as the camera,
 
-    "antiAliasingFactor": Super samples per pixel, must be at least 1. Optional,
+    "antiAliasingFactor": Super samples per pixel, must be at least 1. Optional, default is 1,
+    "lightingModel": One of "lambertian", or "phong". Optional, default is "phong",
 
-    "projection": Projection type - one of "perspective", "orthographic" or "fisheye",
+    "projection": Projection type - one of "perspective", "orthographic", or "fisheye",
+
     "viewWidth": If using an orthographic projection, viewWidth must be specified. It is the view width of the rendered image in in-scene units. Can be used with a perspective projection, in which case focalLength must be specified.
     "hfov": If using a fisheye projection, hfov must be specified. It is the horizontal field of view in degrees. Can optionally replace viewWidth for a perspective projection.
     "focalLength": For perspective projection, distances from origin to render-plane. If this is not specified, opticalRadius must be.

@@ -34,8 +34,13 @@ type Light struct {
 	Ambient  Color  `json:"ambient"`
 }
 
-// LambertianReflectance calculates the Lambertian reflectance model. The surface normal should be normalized.
-func LambertianReflectance(lights []Light, position Vector, normal Vector, material Material) (color Color) {
+// LightingModel is a function type that takes information about a location,
+// calculates lighting using a specific lighitng model and returns a color for
+// that location. The surface normal vector should be normalized.
+type LightingModel func(lights []Light, ambientLight Color, viewer Vector, position Vector, normal Vector, material Material) (color Color)
+
+// LambertianLighting calculates the Lambertian lighting model. The surface normal vector should be normalized.
+func LambertianLighting(lights []Light, _ Color, _ Vector, position Vector, normal Vector, material Material) (color Color) {
 	for _, light := range lights {
 		dist := light.Position.Subtract(position)
 
@@ -50,7 +55,7 @@ func LambertianReflectance(lights []Light, position Vector, normal Vector, mater
 			continue
 		}
 
-		// Lambert diffusion
+		// Lambertian diffusion
 		surfaceLightLevel := lightVec.Dot(normal)
 		color.Red += surfaceLightLevel * light.Diffuse.Red * material.Diffuse.Red
 		color.Green += surfaceLightLevel * light.Diffuse.Green * material.Diffuse.Green
@@ -59,8 +64,8 @@ func LambertianReflectance(lights []Light, position Vector, normal Vector, mater
 	return
 }
 
-// PhongReflectance calculates the Phong reflectance model. The surface normal should be normalized.
-func PhongReflectance(lights []Light, ambientLight Color, viewer Vector, position Vector, normal Vector, material Material) (color Color) {
+// PhongLighting calculates the Phong lighting model. The surface normal vector should be normalized.
+func PhongLighting(lights []Light, ambientLight Color, viewer Vector, position Vector, normal Vector, material Material) (color Color) {
 	for _, light := range lights {
 		dist := light.Position.Subtract(position)
 
