@@ -48,8 +48,6 @@ func (jsonObjects *JSONObjects) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	*jsonObjects = append(*jsonObjects)
-
 	for i, typing := range typingData {
 		obj, err := unmarshalObject(typing, rawObjects[i])
 		if err != nil {
