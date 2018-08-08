@@ -18,7 +18,12 @@ func main() {
 	sceneCount := 0
 
 	for _, path := range sceneData {
-		sceneCount += walkPath(path)
+		ext := filepath.Ext(path)
+		if ext != "" && ext != ".json" {
+			fmt.Printf("\nError: path '%s' is not a valid scene file - missing '.json' extension\n\n", path)
+		} else {
+			sceneCount += walkPath(path)
+		}
 	}
 
 	fmt.Printf("Sucessfully rendered %d scene(s)\n", sceneCount)
@@ -41,14 +46,17 @@ func walkPath(path string) (sceneCount int) {
 		}
 
 		for _, subpath := range subpaths {
-			sceneCount += walkPath(fmt.Sprintf("%s/%s", path, subpath.Name()))
+			fullpath := filepath.Join(path, subpath.Name())
+			sceneCount += walkPath(fullpath)
 		}
 	case mode.IsRegular():
-		if filepath.Ext(path) != ".json" {
+		ext := filepath.Ext(path)
+		if ext != ".json" {
 			return
 		}
+		outputPath := fmt.Sprintf("%s.png", strings.TrimSuffix(path, ext))
 
-		err = renderScene(path)
+		err = renderScene(path, outputPath)
 		if err != nil {
 			fmt.Printf("Error from %s: %v\n", path, err)
 		} else {
@@ -59,9 +67,7 @@ func walkPath(path string) (sceneCount int) {
 	return
 }
 
-func renderScene(inputPath string) error {
-	outputPath := fmt.Sprintf("%s.png", strings.TrimSuffix(inputPath, ".json"))
-
+func renderScene(inputPath string, outputPath string) error {
 	input, err := os.Open(inputPath)
 	if err != nil {
 		return fmt.Errorf("unable to open data file: %v", err)
