@@ -76,7 +76,7 @@ func (s *Scene) FindIntersection(r raytracing.Ray) (bool, float64, int) {
 }
 
 // TraceRay traces a given ray to its first intersection and performs lighting calculations
-func (s *Scene) TraceRay(r raytracing.Ray, lightStrength float64, remainingDepth int) (color raytracing.Color) {
+func (s *Scene) TraceRay(r raytracing.Ray, lightStrength float64, remainingDepth int, lighting raytracing.LightingModel) (color raytracing.Color) {
 	intersected, t, currentObject := s.FindIntersection(r)
 
 	if !intersected {
@@ -110,7 +110,7 @@ func (s *Scene) TraceRay(r raytracing.Ray, lightStrength float64, remainingDepth
 		}
 	}
 
-	surfaceColor := raytracing.PhongReflectance(visibleLights, s.ambientLight, viewer, intersection, normal, material)
+	surfaceColor := lighting(visibleLights, s.ambientLight, viewer, intersection, normal, material)
 	color.Red += surfaceColor.Red * lightStrength
 	color.Green += surfaceColor.Green * lightStrength
 	color.Blue += surfaceColor.Blue * lightStrength
@@ -122,7 +122,7 @@ func (s *Scene) TraceRay(r raytracing.Ray, lightStrength float64, remainingDepth
 
 	var reflectedColor raytracing.Color
 	if remainingDepth > 0 {
-		reflectedColor = s.TraceRay(r, lightStrength*material.Reflectance, remainingDepth-1)
+		reflectedColor = s.TraceRay(r, lightStrength*material.Reflectance, remainingDepth-1, lighting)
 	}
 
 	color.Red = color.Red + reflectedColor.Red

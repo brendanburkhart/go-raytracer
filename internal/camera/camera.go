@@ -95,7 +95,9 @@ type Camera struct {
 
 	output *image.RGBA
 
-	AntiAliasingFactor *int `json:"antiAliasingFactor"`
+	AntiAliasingFactor *int   `json:"antiAliasingFactor"`
+	LightingModelName  string `json:"lightingModel"`
+	lightingModel      raytracing.LightingModel
 
 	Lens
 	Scope
@@ -124,6 +126,20 @@ func (c *Camera) UnmarshalJSON(b []byte) error {
 	if c.AntiAliasingFactor == nil {
 		antiAliasingFactor := 1
 		c.AntiAliasingFactor = &antiAliasingFactor
+	}
+
+	// Logging would be useful to notify the user when defaults are used
+	if c.LightingModelName == "" {
+		c.lightingModel = raytracing.PhongLighting
+	} else {
+		switch c.LightingModelName {
+		case "lambertian":
+			c.lightingModel = raytracing.LambertianLighting
+		case "phong":
+			c.lightingModel = raytracing.PhongLighting
+		default:
+			c.lightingModel = raytracing.PhongLighting
+		}
 	}
 
 	var err error
@@ -201,7 +217,7 @@ func (c *Camera) renderRays(s *scene.Scene, rays []raytracing.Ray, pixelX int, p
 	var colors []raytracing.Color
 
 	for _, ray := range rays {
-		colors = append(colors, s.TraceRay(ray, 1.0, maxRayReflections))
+		colors = append(colors, s.TraceRay(ray, 1.0, maxRayReflections, c.lightingModel))
 	}
 
 	pixelColor := raytracing.AverageColors(colors)
