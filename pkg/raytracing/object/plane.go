@@ -1,6 +1,7 @@
 package object
 
 import (
+	"encoding/json"
 	"math"
 
 	"github.com/BrendanBurkhart/raytracer/pkg/raytracing"
@@ -11,6 +12,15 @@ type Plane struct {
 	*Material
 	Normal raytracing.Vector `json:"normal"`
 	Point  raytracing.Vector `json:"point"`
+}
+
+func planeFactory(data *json.RawMessage) (Object, error) {
+	obj := Plane{}
+	if err := json.Unmarshal(*data, &obj); err != nil {
+		return obj, err
+	}
+	obj.Normalize()
+	return obj, nil
 }
 
 // Intersect returns whether there is an intersection with r within maxRange,

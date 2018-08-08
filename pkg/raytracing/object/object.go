@@ -24,7 +24,14 @@ func (om *Material) MaterialID() int {
 	return om.Material
 }
 
-// Custom JSON unmarshalling to handle different implements of the Object interface
+// shapeUnmarshaller unmarshals JSON data into a specific implementation of Object
+type objectFactory func(*json.RawMessage) (Object, error)
+
+var objectFactoryMap = map[string]objectFactory{
+	"plane":  planeFactory,
+	"sphere": sphereFactory,
+	"box":    boxFactory,
+}
 
 // JSONObjects is a named type to allow a slice of interfaces to have custom JSON unmarshalling
 type JSONObjects []Object
@@ -36,14 +43,12 @@ func (jsonObjects *JSONObjects) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	var types []map[string]*json.RawMessage
-	if err := json.Unmarshal(b, &types); err != nil {
+	var typingData []map[string]*json.RawMessage
+	if err := json.Unmarshal(b, &typingData); err != nil {
 		return err
 	}
 
-	*jsonObjects = append(*jsonObjects)
-
-	for i, typing := range types {
+	for i, typing := range typingData {
 		obj, err := unmarshalObject(typing, rawObjects[i])
 		if err != nil {
 			return err
@@ -53,39 +58,37 @@ func (jsonObjects *JSONObjects) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// findObjectFactory returns the correct factory function for shape primitive (Object) based on its typing data
+func findObjectFactory(typing map[string]*json.RawMessage) (factory objectFactory, err error) {
+	rawShapeType, ok := typing["type"]
+	if !ok {
+		return nil, fmt.Errorf("JSON object does not contain key 'type' needed to unmarshal it")
+	}
+
+	var shapeType string
+	if err = json.Unmarshal(*rawShapeType, &shapeType); err != nil {
+		return nil, fmt.Errorf("error unmarshalling shape type to string: %v", err)
+	}
+
+	factory, ok = objectFactoryMap[shapeType]
+	if !ok {
+		return nil, fmt.Errorf("cannot find object type %s referenced in JSON data", shapeType)
+	}
+	return factory, nil
+}
+
 // unmarshalObject unmarshals the data into a struct implementing Object and returns it as an Object
 func unmarshalObject(typing map[string]*json.RawMessage, data *json.RawMessage) (Object, error) {
-	for key, value := range typing {
-		if key == "type" {
-			var shapeType string
-			if err := json.Unmarshal(*value, &shapeType); err != nil {
-				return nil, err
-			}
-			switch shapeType {
-			case "sphere":
-				obj := Sphere{}
-				if err := json.Unmarshal(*data, &obj); err != nil {
-					return nil, err
-				}
-				return obj, nil
-			case "plane":
-				obj := Plane{}
-				if err := json.Unmarshal(*data, &obj); err != nil {
-					return nil, err
-				}
-				obj.Normalize()
-				return obj, nil
-			case "box":
-				obj := Box{}
-				if err := json.Unmarshal(*data, &obj); err != nil {
-					return nil, err
-				}
-				obj.Initialize()
-				return obj, nil
-			default:
-				return nil, fmt.Errorf("cannot find object type %s referenced in json data", shapeType)
-			}
-		}
+	factory, err := findObjectFactory(typing)
+	if err != nil {
+		return nil, err
 	}
-	return nil, fmt.Errorf("JSON object does not contain key 'type' needed to unmarshal it")
+
+	var obj Object
+	obj, err = factory(data)
+	if err != nil {
+		return nil, err
+	}
+
+	return obj, nil
 }
