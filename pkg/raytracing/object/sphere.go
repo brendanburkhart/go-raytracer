@@ -1,6 +1,7 @@
 package object
 
 import (
+	"encoding/json"
 	"math"
 
 	"github.com/BrendanBurkhart/raytracer/pkg/raytracing"
@@ -11,6 +12,12 @@ type Sphere struct {
 	*Material
 	Radius float64           `json:"radius"`
 	Center raytracing.Vector `json:"center"`
+}
+
+func sphereFactory(data *json.RawMessage) (Object, error) {
+	obj := Sphere{}
+	err := json.Unmarshal(*data, &obj)
+	return obj, err
 }
 
 // Intersect returns whether there is an intersection with r within maxRange,

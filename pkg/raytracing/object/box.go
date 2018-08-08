@@ -1,6 +1,7 @@
 package object
 
 import (
+	"encoding/json"
 	"math"
 
 	"github.com/BrendanBurkhart/raytracer/pkg/raytracing"
@@ -13,6 +14,15 @@ type Box struct {
 	MaxCorner raytracing.Vector `json:"maxCorner"`
 	center    raytracing.Vector
 	extent    raytracing.Vector
+}
+
+func boxFactory(data *json.RawMessage) (Object, error) {
+	obj := Box{}
+	if err := json.Unmarshal(*data, &obj); err != nil {
+		return obj, err
+	}
+	obj.Initialize()
+	return obj, nil
 }
 
 // Initialize performs precomputation and preprocessing
