@@ -69,7 +69,7 @@ func findObjectFactory(typing map[string]*json.RawMessage) (factory objectFactor
 
 	var shapeType string
 	if err = json.Unmarshal(*rawShapeType, &shapeType); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error unmarshalling shape type to string: %v", err)
 	}
 
 	factory, ok = objectFactoryMap[shapeType]
