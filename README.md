@@ -1,10 +1,10 @@
 # Raytracer
 
-This Raytracer is written in Go, renders .json files into an image. I wrote this to learn more about raytracing, and to try out Go on something other than server-side programming.
+This Raytracer is written in Go, and renders .json files into an image. I wrote this to learn more about raytracing, and to try out Go on something other than server-side programming.
 
 ### Features
 
-Renders large/complicated scenes quickly using goroutines. Supports orthographic, simple perspective and fisheye projections.
+This renders large/complicated scenes quickly using goroutines. Supports orthographic, simple perspective and fisheye projections.
 
 It currently only supports materials, and does not support rendering textures or UV mapping. Additionally, only planes, spheres and boxes are supported. I may add support for UV mapping and more complex/custom shapes eventually.
 
