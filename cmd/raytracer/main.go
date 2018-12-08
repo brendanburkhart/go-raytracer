@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/BrendanBurkhart/raytracer/internal/camera"
-	"github.com/BrendanBurkhart/raytracer/internal/scene"
+	"github.com/brendanburkhart/raytracer/internal/camera"
+	"github.com/brendanburkhart/raytracer/internal/scene"
 )
 
 func main() {

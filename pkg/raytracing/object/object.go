@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/BrendanBurkhart/raytracer/pkg/raytracing"
+	"github.com/brendanburkhart/raytracer/pkg/raytracing"
 )
 
 // Object provides an interface for intersecting with 3D objects and their materials

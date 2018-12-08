@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"math"
 
-	"github.com/BrendanBurkhart/raytracer/pkg/raytracing"
+	"github.com/brendanburkhart/raytracer/pkg/raytracing"
 )
 
 // Box is a representation of an axis aligned box

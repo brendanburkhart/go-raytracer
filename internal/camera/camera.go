@@ -10,9 +10,9 @@ import (
 	"math"
 	"sync"
 
-	"github.com/BrendanBurkhart/raytracer/internal/scene"
+	"github.com/brendanburkhart/raytracer/internal/scene"
 
-	"github.com/BrendanBurkhart/raytracer/pkg/raytracing"
+	"github.com/brendanburkhart/raytracer/pkg/raytracing"
 )
 
 type empty struct{}

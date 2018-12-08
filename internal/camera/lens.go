@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/BrendanBurkhart/raytracer/pkg/raytracing"
+	"github.com/brendanburkhart/raytracer/pkg/raytracing"
 )
 
 // Lens calculates light rays from the camera into the scene

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/BrendanBurkhart/raytracer/pkg/raytracing"
-	"github.com/BrendanBurkhart/raytracer/pkg/raytracing/object"
+	"github.com/brendanburkhart/raytracer/pkg/raytracing"
+	"github.com/brendanburkhart/raytracer/pkg/raytracing/object"
 )
 
 // Scene describes a renderable scene and holds an output image

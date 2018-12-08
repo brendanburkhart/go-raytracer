@@ -1,32 +1,37 @@
 # Raytracer
 
-Raytracer written in Go, renders .json files into an image. I wrote this to learn more about raytracing, and to try out Go on something other than server-side programming.
+A raytracer written in Go, which renders JSON files into an image. I wrote this to learn more about raytracing, and to try out Go on something other than server-side programming.
 
 ### Features
 
-Renders large/complicated scenes quickly using goroutines. Supports orthographic, simple perspective and fisheye projections.
+- Renders large/complicated scenes quickly using goroutines. Supports orthographic, simple perspective and fisheye projections.
 
-I currently only support materials, not rendering textures or UV mapping. Additionally, only planes, spheres and boxes are supported. I may add support for UV mapping and more complex/custom shapes eventually.
+- Currently only supports materials, not rendering textures or UV mapping. Additionally, only planes, spheres and boxes are supported. Support for UV mapping and more complex/custom shapes may be added eventually.
 
-Both Lambertian and Phong lighting models are supported, and both work with reflections and shadows. Refraction is not currently available.
+- Both Lambertian and Phong lighting models are supported, and both work with reflections and shadows. Refraction is not currently available.
 
-I added simple configurable anti-aliasing through super sampling.
+- Configurable anti-aliasing through super sampling.
 
 ### Installing
 
-Requires Go to be installed and setup. If it is not, refer to golang.org/doc/install to get started.
+Requires Go to be installed and setup. If it is not, refer to [golang.org/doc/install](https://golang.org/doc/install) to get started.
 
-Run `go get -u github.com/BrendanBurkhart/raytracer/...` to install or update.
+Run `go get -u github.com/brendanburkhart/raytracer/...` to install or update.
 
 ### Usage
 
-Run the executable with the data file(s) and/or folder(s) containing the scenes to be rendered. Each scene will be rendered and output into a PNG of the same name as the scene's data file in the same location. Example: `raytracing.exe ./scenes ./example.json`.
+```
+    raytracing.exe <folder or JSON file>...
+```
+
+Run the executable with the data file(s) and/or folder(s) containing the scenes to be rendered. Each scene will be rendered and output into a PNG of the same name as the scene's data file in the same location. Example: `raytracing.exe ./scenes/example.json`.
 
 ## Scene data description
 
 Scenes are described using JSON files in the following format:
 
-```{
+```
+{
   "width": Output image width,
   "height": Output image height,
   "camera": {
@@ -57,7 +62,7 @@ Colors are specified as `{"red": 0.0-1.0, "green": 0.0-1.0, "blue": 0.0-1.0}`.
 
 Materials are specified as:
 
-```JSON
+```
 {
     "specular": Specular color,
     "diffuse": Diffuse color,
@@ -69,7 +74,7 @@ Materials are specified as:
 
 Lights are specified as:
 
-```JSON
+```
 {
     "position": Vector,
     "specular": Specular component, color,
@@ -82,7 +87,7 @@ Object in the scene can be one of three primitives: sphere, box or plane.
 
 Sphere:
 
-```JSON
+```
 {
     "type": "sphere",
     "center": Position vector,
@@ -93,7 +98,7 @@ Sphere:
 
 Box:
 
-```JSON
+```
 {
     "type": "box",
     "minCorner": Position vector of minimum corner,
@@ -104,7 +109,7 @@ Box:
 
 Plane:
 
-```JSON
+```
 {
     "type": "plane",
     "point": Position vector of any point in plane,
