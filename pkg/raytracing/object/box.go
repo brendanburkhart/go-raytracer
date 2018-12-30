@@ -71,8 +71,8 @@ func (b Box) Intersect(r raytracing.Ray, maxRange float64) (bool, float64) {
 }
 
 // SurfaceNormal returns the normal vector to the box
-func (b Box) SurfaceNormal(point raytracing.Vector) (normal raytracing.Vector) {
-	relativePoint := point.Subtract(b.center)
+func (b Box) SurfaceNormal(r raytracing.Ray) (normal raytracing.Vector) {
+	relativePoint := r.Position.Subtract(b.center)
 
 	minDistance := math.Abs(math.Abs(relativePoint.X) - b.extent.X)
 	normal = raytracing.Vector{X: signum(relativePoint.X), Y: 0, Z: 0}

@@ -48,8 +48,9 @@ func (s Sphere) Intersect(r raytracing.Ray, maxRange float64) (bool, float64) {
 	return false, maxRange
 }
 
-// SurfaceNormal returns the normal vector to the sphere at the specified point
-func (s Sphere) SurfaceNormal(point raytracing.Vector) raytracing.Vector {
-	normal, _ := point.Subtract(s.Center).Normalize()
+// SurfaceNormal returns the normal vector to the sphere at the point specified
+// by the position of the ray
+func (s Sphere) SurfaceNormal(r raytracing.Ray) raytracing.Vector {
+	normal, _ := r.Position.Subtract(s.Center).Normalize()
 	return normal
 }

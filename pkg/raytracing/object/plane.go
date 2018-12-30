@@ -44,7 +44,7 @@ func (p Plane) Intersect(r raytracing.Ray, maxRange float64) (bool, float64) {
 }
 
 // SurfaceNormal returns the normal vector to the plane
-func (p Plane) SurfaceNormal(point raytracing.Vector) raytracing.Vector {
+func (p Plane) SurfaceNormal(r raytracing.Ray) raytracing.Vector {
 	return p.Normal
 }
 

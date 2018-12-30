@@ -10,7 +10,7 @@ import (
 // Object provides an interface for intersecting with 3D objects and their materials
 type Object interface {
 	Intersect(r raytracing.Ray, maxRange float64) (bool, float64)
-	SurfaceNormal(point raytracing.Vector) raytracing.Vector
+	SurfaceNormal(r raytracing.Ray) raytracing.Vector
 	MaterialID() int
 }
 
@@ -28,9 +28,10 @@ func (om *Material) MaterialID() int {
 type objectFactory func(*json.RawMessage) (Object, error)
 
 var objectFactoryMap = map[string]objectFactory{
-	"plane":  planeFactory,
-	"sphere": sphereFactory,
-	"box":    boxFactory,
+	"plane":    planeFactory,
+	"sphere":   sphereFactory,
+	"box":      boxFactory,
+	"triangle": triangleFactory,
 }
 
 // JSONObjects is a named type to allow a slice of interfaces to have custom JSON unmarshalling

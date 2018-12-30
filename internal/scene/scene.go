@@ -85,7 +85,8 @@ func (s *Scene) TraceRay(r raytracing.Ray, lightStrength float64, remainingDepth
 
 	scaled := r.Direction.Scale(t)
 	intersection := r.Position.Add(scaled)
-	normal := s.Objects[currentObject].SurfaceNormal(intersection)
+	r.Position = intersection
+	normal := s.Objects[currentObject].SurfaceNormal(r)
 	material := s.Materials[s.Objects[currentObject].MaterialID()]
 
 	viewer := r.Direction.Negative()
@@ -105,7 +106,7 @@ func (s *Scene) TraceRay(r raytracing.Ray, lightStrength float64, remainingDepth
 		intersected, distance, _ := s.FindIntersection(lightRay)
 		if !intersected {
 			visibleLights = append(visibleLights, light)
-		} else if distance > 1.0 {
+		} else if distance >= 1.0 {
 			visibleLights = append(visibleLights, light)
 		}
 	}
@@ -115,7 +116,7 @@ func (s *Scene) TraceRay(r raytracing.Ray, lightStrength float64, remainingDepth
 	color.Green += surfaceColor.Green * lightStrength
 	color.Blue += surfaceColor.Blue * lightStrength
 
-	r.Position = intersection
+	// Reflect direction of light ray across normal
 	reflect := 2.0 * r.Direction.Dot(normal)
 	r.Direction = r.Direction.Subtract(normal.Scale(reflect))
 	r.Direction, _ = r.Direction.Normalize()

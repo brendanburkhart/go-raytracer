@@ -6,7 +6,7 @@ A raytracer written in Go, which renders JSON files into an image. I wrote this 
 
 - Renders large/complicated scenes quickly using goroutines. Supports orthographic, simple perspective and fisheye projections.
 
-- Currently only supports materials, not rendering textures or UV mapping. Additionally, only planes, spheres and boxes are supported. Support for UV mapping and more complex/custom shapes may be added eventually.
+- Currently only supports materials, not rendering textures or UV mapping. Additionally, only planes, triangles, spheres and boxes are supported. Support for UV mapping and more complex/custom shapes may be added eventually.
 
 - Both Lambertian and Phong lighting models are supported, and both work with reflections and shadows. Refraction is not currently available.
 
