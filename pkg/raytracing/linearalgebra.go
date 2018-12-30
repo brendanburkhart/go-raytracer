@@ -79,6 +79,22 @@ func (v Vector) Normalize() (Vector, bool) {
 	return v.Scale(1.0 / mag), true
 }
 
+// Equals returns a boolean indicating whether the vectors are equal
+func (v Vector) Equals(o Vector) bool {
+	if math.Abs(o.X-v.X) > 1e-8 {
+		return false
+	}
+	if math.Abs(o.Y-v.Y) > 1e-8 {
+		return false
+	}
+	return math.Abs(o.Z-v.Z) < 1e-8
+}
+
+// IsVertical returns a boolean indicating whether this vector is vertical
+func (v Vector) IsVertical() bool {
+	return math.Abs(v.Y) > 1e-8 && math.Abs(v.X) < 1e-8 && math.Abs(v.Z) < 1e-8
+}
+
 // Rotate returns the vector rotated around the specified axis
 // Rotation is counter-clockwise when axis vector points towards observer
 func (v Vector) Rotate(degrees float64, axis Vector) (Vector, error) {

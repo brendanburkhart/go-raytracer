@@ -53,8 +53,14 @@ func (s *Scope) Initialize() error {
 		if !ok {
 			return fmt.Errorf("target and position are the same")
 		}
-		vertical, _ := raytracing.Vector{X: 0, Y: 1, Z: 0}.Normalize()
-		right = forward.Cross(vertical)
+		vertical := raytracing.Vector{X: 0, Y: 1, Z: 0}
+
+		if forward.IsVertical() {
+			right = raytracing.Vector{X: 1, Y: 0, Z: 0}
+		} else {
+			right = forward.Cross(vertical)
+		}
+
 		up = right.Cross(forward)
 
 		var err error
